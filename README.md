@@ -25,7 +25,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 ### 1. Add the Marketplace
 
 ```bash
-/plugin marketplace add /path/to/regen-ai
+/plugin marketplace add https://github.com/gaiaaiagent/regen-ai-claude
 ```
 
 ### 2. Install Plugins
