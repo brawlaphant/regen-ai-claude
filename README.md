@@ -12,33 +12,44 @@ Zero-config access to the Regen Network ecosystem through three MCP server plugi
 
 ## Prerequisites
 
-**Node.js plugins (koi):** Node.js 18+
-
-**Python plugins (ledger, registry-review):** uv
+* **[Node.js 18+](https://nodejs.org/en) for koi** 
+* **Python with [uv](https://github.com/astral-sh/uv) for ledger and registry-review:** 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
+* **[Claude Code](https://code.claude.com/docs/en/setup):**
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+
+
 ## Quick Start
 
-### 1. Add the Marketplace
-
+### 1. Open up Claude Code
 ```bash
+claude
+```
+
+### 2. Add the Marketplace
+
+```claude
 /plugin marketplace add https://github.com/gaiaaiagent/regen-ai-claude
 ```
 
-### 2. Install Plugins
+### 3. Install Plugins
 
-```bash
+```claude
 /plugin install koi@regen-ai
 /plugin install ledger@regen-ai
 /plugin install registry-review@regen-ai
 ```
 
-### 3. Restart and Verify
+### 4. Restart and Verify
 
 Restart Claude Code, then:
-```bash
+```claude
 /mcp
 ```
 
