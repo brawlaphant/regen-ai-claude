@@ -8,13 +8,13 @@ Zero-config access to the Regen Network ecosystem through three MCP server plugi
 |--------|---------|-------------|
 | **koi** | [regen-koi-mcp](https://www.npmjs.com/package/regen-koi-mcp) | Knowledge graph - ecological data and SPARQL queries |
 | **ledger** | [regen-python-mcp](https://pypi.org/project/regen-python-mcp/) | Blockchain data, governance, analytics, portfolio analysis |
-| **registry** | [registry-review-mcp](https://pypi.org/project/registry-review-mcp/) | Document review - carbon credit project compliance |
+| **registry-review** | [registry-review-mcp](https://pypi.org/project/registry-review-mcp/) | Document review - carbon credit project compliance |
 
 ## Prerequisites
 
 **Node.js plugins (koi):** Node.js 18+
 
-**Python plugins (ledger, registry):** uv
+**Python plugins (ledger, registry-review):** uv
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
@@ -32,7 +32,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 ```bash
 /plugin install koi@regen-ai
 /plugin install ledger@regen-ai
-/plugin install registry@regen-ai
+/plugin install registry-review@regen-ai
 ```
 
 ### 3. Restart and Verify

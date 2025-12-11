@@ -16,8 +16,8 @@
       "description": "Regen Ledger blockchain data, governance, analytics"
     },
     {
-      "name": "registry",
-      "source": "./plugins/registry/",
+      "name": "registry-review",
+      "source": "./plugins/registry-review/",
       "description": "Carbon credit document review and compliance analysis"
     }
   ]

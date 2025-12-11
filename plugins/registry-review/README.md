@@ -18,7 +18,7 @@ Automated carbon credit project document review using MCP.
 ## Installation
 
 ```bash
-/plugin install registry@regen-ai
+/plugin install registry-review@regen-ai
 # Restart Claude Code
 /mcp
 ```
