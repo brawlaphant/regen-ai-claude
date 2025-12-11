@@ -11,9 +11,9 @@
       "description": "Knowledge Ontology Integration - ecological data and SPARQL queries"
     },
     {
-      "name": "network",
-      "source": "./plugins/network/",
-      "description": "Python-based Regen Network tools and analysis"
+      "name": "ledger",
+      "source": "./plugins/ledger/",
+      "description": "Regen Ledger blockchain data, governance, analytics"
     },
     {
       "name": "registry",

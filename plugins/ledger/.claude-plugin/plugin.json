@@ -1,12 +1,12 @@
 {
-  "name": "network",
+  "name": "ledger",
   "version": "1.0.0",
-  "description": "Regen Network Python MCP - Python-based tools for Regen Network data and analysis",
+  "description": "Regen Ledger MCP - Access Regen Network blockchain data and analytics",
   "author": {
     "name": "Gaia AI Agent",
     "url": "https://github.com/gaiaaiagent"
   },
   "homepage": "https://github.com/gaiaaiagent/regen-python-mcp",
   "license": "Apache-2.0",
-  "keywords": ["regen", "python", "analysis", "data-tools", "mcp"]
+  "keywords": ["regen", "ledger", "blockchain", "ecocredits", "mcp"]
 }

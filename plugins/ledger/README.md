@@ -1,6 +1,6 @@
-# Regen Network Python Plugin
+# Regen Ledger Plugin
 
-Python-based MCP server for Regen Network blockchain queries and analytics.
+Access Regen Network blockchain data through the Regen Ledger MCP server.
 
 ## Features
 
@@ -18,7 +18,7 @@ Python-based MCP server for Regen Network blockchain queries and analytics.
 ## Installation
 
 ```bash
-/plugin install network@regen-ai
+/plugin install ledger@regen-ai
 # Restart Claude Code
 /mcp
 ```
