@@ -19,4 +19,4 @@ dist/
 # Environment
 .env
 .env.local
-.claude/
+.claude/logging/
