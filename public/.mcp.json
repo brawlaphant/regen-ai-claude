@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "regen-koi": {
+      "command": "npx",
+      "args": ["-y", "regen-koi-mcp@latest"],
+      "env": {
+        "KOI_API_ENDPOINT": "https://regen.gaiaai.xyz/api/koi",
+        "REGEN_USER_EMAIL": "${REGEN_USER_EMAIL}"
+      },
+      "description": "Regen KOI - Knowledge search, code graph, entity resolution"
+    },
+    "regen-ledger": {
+      "command": "uvx",
+      "args": ["regen-python-mcp"],
+      "env": {
+        "REGEN_MCP_LOG_LEVEL": "INFO",
+        "REGEN_NODE_URL": "${REGEN_NODE_URL:-https://regen.api.m.stavr.tech}"
+      },
+      "description": "Regen Ledger - Ecocredits, governance, accounts"
+    }
+  }
+}
