@@ -1,5 +1,7 @@
 # Regen AI - Claude Code Plugin Marketplace
 
+[![Validate Marketplace](https://github.com/gaiaaiagent/regen-ai-claude/actions/workflows/validate.yml/badge.svg)](https://github.com/gaiaaiagent/regen-ai-claude/actions/workflows/validate.yml)
+
 Zero-config access to the Regen Network ecosystem through four MCP server plugins.
 
 ## Plugins
