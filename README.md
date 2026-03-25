@@ -12,6 +12,7 @@ Zero-config access to the Regen Network ecosystem through four MCP server plugin
 | **ledger** | [regen-python-mcp](https://pypi.org/project/regen-python-mcp/) | Regen Ledger, Ecocredits, Sales, Governance, Portfolios, Regen Accounts |
 | **registry-review** | [registry-review-mcp](https://pypi.org/project/registry-review-mcp/) | Regen Project Registration Assistance - Methodology Verification - Automation |
 | **regen-compute** | [regen-compute](https://www.npmjs.com/package/regen-compute) | Regenerative AI Compute - Ecological footprint estimation, credit browsing, on-chain retirement |
+| **ecosystem-dashboard** | regen-ecosystem-dashboard-mcp | Live Ecosystem Impact Metrics - Credit Classes - Projects - Jurisdictions |
 
 ## Prerequisites
 

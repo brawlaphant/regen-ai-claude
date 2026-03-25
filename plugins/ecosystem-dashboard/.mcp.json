@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "ecosystem-dashboard": {
+      "command": "npx",
+      "args": ["-y", "regen-ecosystem-dashboard-mcp@latest"],
+      "env": {
+        "REGEN_LCD_URL": "https://lcd-regen.keplr.app"
+      },
+      "description": "Regen Ecosystem Dashboard MCP Server - Live impact metrics from Regen Network"
+    }
+  }
+}

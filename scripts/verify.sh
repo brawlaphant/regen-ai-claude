@@ -20,15 +20,15 @@ check_npm() {
 
 check_pypi() {
   local pkg="$1"
-  local status
-  status=$(curl -s -o /dev/null -w "%{http_code}" "https://pypi.org/pypi/$pkg/json")
-  if [ "$status" = "200" ]; then
+  local http_code
+  http_code=$(curl -s -o /dev/null -w "%{http_code}" "https://pypi.org/pypi/$pkg/json")
+  if [ "$http_code" = "200" ]; then
     local version
     version=$(curl -s "https://pypi.org/pypi/$pkg/json" | python3 -c "import sys,json; print(json.load(sys.stdin)['info']['version'])" 2>/dev/null || echo "unknown")
     echo "  PASS  pypi: $pkg ($version)"
     PASS=$((PASS + 1))
   else
-    echo "  FAIL  pypi: $pkg — not found on PyPI (HTTP $status)"
+    echo "  FAIL  pypi: $pkg — not found on PyPI (HTTP $http_code)"
     FAIL=$((FAIL + 1))
   fi
 }
@@ -40,6 +40,7 @@ echo ""
 echo "npm packages:"
 check_npm "regen-koi-mcp"
 check_npm "regen-compute"
+check_npm "regen-ecosystem-dashboard-mcp"
 echo ""
 
 echo "PyPI packages:"

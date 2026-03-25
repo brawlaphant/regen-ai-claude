@@ -24,6 +24,11 @@
       "name": "regen-compute",
       "source": "./plugins/regen-compute/",
       "description": "Ecological footprint estimation, credit browsing, on-chain retirement"
+    },
+    {
+      "name": "ecosystem-dashboard",
+      "source": "./plugins/ecosystem-dashboard/",
+      "description": "Live ecosystem impact metrics, credit classes, and project data"
     }
   ]
 }
