@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "regen-compute": {
+      "command": "npx",
+      "args": ["-y", "regen-compute@latest"],
+      "description": "Regen Compute MCP Server - Ecological footprint estimation and credit retirement"
+    }
+  }
+}

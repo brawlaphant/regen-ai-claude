@@ -19,6 +19,11 @@
       "name": "registry-review",
       "source": "./plugins/registry-review/",
       "description": "Carbon credit document review and compliance analysis"
+    },
+    {
+      "name": "regen-compute",
+      "source": "./plugins/regen-compute/",
+      "description": "Ecological footprint estimation, credit browsing, on-chain retirement"
     }
   ]
 }
