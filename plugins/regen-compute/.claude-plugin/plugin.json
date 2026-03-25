@@ -1,0 +1,12 @@
+{
+  "name": "regen-compute",
+  "version": "1.0.0",
+  "description": "Regen Compute MCP - Ecological footprint estimation, credit browsing, and on-chain retirement",
+  "author": {
+    "name": "Regen Network",
+    "url": "https://github.com/regen-network"
+  },
+  "homepage": "https://github.com/regen-network/regen-compute",
+  "license": "Apache-2.0",
+  "keywords": ["regen", "compute", "ecological-credits", "carbon-credits", "retirement", "mcp"]
+}
