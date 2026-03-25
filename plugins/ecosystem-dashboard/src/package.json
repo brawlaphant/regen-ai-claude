@@ -1,0 +1,43 @@
+{
+  "name": "regen-ecosystem-dashboard-mcp",
+  "version": "1.0.0",
+  "description": "MCP server for live Regen Network ecosystem impact metrics — credit classes, projects, jurisdictions, and supply data queried directly from the Regen Ledger",
+  "main": "index.js",
+  "bin": {
+    "regen-ecosystem-dashboard-mcp": "index.js"
+  },
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "regen-network",
+    "ecocredits",
+    "ecosystem",
+    "dashboard",
+    "impact-metrics",
+    "carbon-credits",
+    "biodiversity",
+    "claude",
+    "claude-code"
+  ],
+  "author": {
+    "name": "Regen Network",
+    "url": "https://github.com/regen-network"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/regen-network/regen-ai-claude.git",
+    "directory": "plugins/ecosystem-dashboard/src"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

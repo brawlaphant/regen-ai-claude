@@ -19,6 +19,11 @@
       "name": "registry-review",
       "source": "./plugins/registry-review/",
       "description": "Carbon credit document review and compliance analysis"
+    },
+    {
+      "name": "ecosystem-dashboard",
+      "source": "./plugins/ecosystem-dashboard/",
+      "description": "Live ecosystem impact metrics, credit classes, and project data"
     }
   ]
 }

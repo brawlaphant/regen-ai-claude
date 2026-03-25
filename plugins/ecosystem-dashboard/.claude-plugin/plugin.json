@@ -1,0 +1,12 @@
+{
+  "name": "ecosystem-dashboard",
+  "version": "1.0.0",
+  "description": "Regen Ecosystem Dashboard MCP - Live impact metrics, credit classes, and project data from Regen Network",
+  "author": {
+    "name": "Regen Network",
+    "url": "https://github.com/regen-network"
+  },
+  "homepage": "https://github.com/regen-network/regen-ai-claude/tree/main/plugins/ecosystem-dashboard",
+  "license": "Apache-2.0",
+  "keywords": ["regen", "ecosystem", "dashboard", "impact-metrics", "ecocredits", "mcp"]
+}

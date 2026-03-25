@@ -1,6 +1,6 @@
 # Regen AI - Claude Code Plugin Marketplace
 
-Zero-config access to the Regen Network ecosystem through three MCP server plugins.
+Zero-config access to the Regen Network ecosystem through four MCP server plugins.
 
 ## Plugins
 
@@ -9,6 +9,7 @@ Zero-config access to the Regen Network ecosystem through three MCP server plugi
 | **koi** | [regen-koi-mcp](https://www.npmjs.com/package/regen-koi-mcp) | Knowledge Organizational Infrastructure - Regen Commons - Knowledge Graphs - Embeddings |
 | **ledger** | [regen-python-mcp](https://pypi.org/project/regen-python-mcp/) | Regen Ledger, Ecocredits, Sales, Governance, Portfolios, Regen Accounts |
 | **registry-review** | [registry-review-mcp](https://pypi.org/project/registry-review-mcp/) | Regen Project Registration Assistance - Methodology Verification - Automation |
+| **ecosystem-dashboard** | regen-ecosystem-dashboard-mcp | Live Ecosystem Impact Metrics - Credit Classes - Projects - Jurisdictions |
 
 ## Prerequisites
 
