@@ -20,8 +20,6 @@ plugins/your-plugin/
 
 #### 1. `.claude-plugin/plugin.json`
 
-Plugin metadata. Follow this format exactly:
-
 ```json
 {
   "name": "your-plugin",
@@ -37,183 +35,63 @@ Plugin metadata. Follow this format exactly:
 }
 ```
 
-**Rules:**
-- `name` must match your directory name under `plugins/`
-- `version` should be `1.0.0` for new plugins
-- `license` should be `Apache-2.0` to match the repo
-- Include `"regen"` and `"mcp"` in keywords
-
 #### 2. `.mcp.json`
 
-MCP server configuration that Claude Code uses to start the server:
-
-**For npm packages:**
-
-```json
-{
-  "mcpServers": {
-    "your-server-name": {
-      "command": "npx",
-      "args": ["-y", "your-npm-package@latest"],
-      "env": {
-        "YOUR_ENV_VAR": "value"
-      },
-      "description": "Short description of the MCP server"
-    }
-  }
-}
-```
-
-**For PyPI packages:**
-
-```json
-{
-  "mcpServers": {
-    "your-server-name": {
-      "command": "uvx",
-      "args": ["your-pypi-package"],
-      "env": {
-        "YOUR_ENV_VAR": "value"
-      },
-      "description": "Short description of the MCP server"
-    }
-  }
-}
-```
-
-**Rules:**
-- Use `npx -y package@latest` for npm, `uvx package` for PyPI
-- Only include env vars that are genuinely needed
-- The server name in `mcpServers` should be descriptive and kebab-case
+**npm:** `"command": "npx", "args": ["-y", "your-package@latest"]`
+**PyPI:** `"command": "uvx", "args": ["your-package"]`
 
 #### 3. `README.md`
 
-Plugin documentation. Use this structure:
+Include: description, features, prerequisites, `claude mcp add` install command, and package/source links.
 
-```markdown
-# Your Plugin Name
+### Update Manifests
 
-One-paragraph description of what the plugin does.
+- Add to `.claude-plugin/marketplace.json`
+- Add to the plugins table in root `README.md`
 
-## Features
+## Testing Your Plugin Locally
 
-- Feature 1
-- Feature 2
-- Feature 3
-
-## Prerequisites
-
-- Node.js 18+ (for npm packages) or Python with uv (for PyPI packages)
-
-## Installation
-
-Add to your `.mcp.json`:
-
-\```json
-{
-  "your-server": {
-    "command": "npx",
-    "args": ["-y", "your-package@latest"],
-    "description": "Your MCP server description"
-  }
-}
-\```
-
-## Package
-
-[Link to npm or PyPI package]
-
-## Source
-
-[Link to source repository]
-```
-
-### Update the Marketplace Manifest
-
-Add your plugin to `.claude-plugin/marketplace.json`:
-
-```json
-{
-  "name": "your-plugin",
-  "source": "./plugins/your-plugin/",
-  "description": "Short description matching your plugin.json"
-}
-```
-
-### Update the README
-
-Add a row to the plugins table in the root `README.md`:
-
-```markdown
-| **your-plugin** | [your-package](package-url) | Short description |
-```
-
-## Before Submitting
-
-### 1. Verify your package is published
-
-Your MCP server package **must** be published on npm or PyPI before you submit. Run the health check:
+### 1. Verify the package is published
 
 ```bash
-./scripts/verify.sh
+npm view your-package version          # npm
+curl -s https://pypi.org/pypi/your-package/json | python3 -c "import sys,json; print(json.load(sys.stdin)['info']['version'])"  # PyPI
 ```
 
-If your package isn't listed in the script yet, test it manually:
+### 2. Add with `claude mcp add`
+
+**npm:** `claude mcp add --transport stdio --scope user your-name -- npx -y your-package@latest`
+**PyPI:** `claude mcp add --transport stdio --scope user your-name -- uvx your-package`
+
+### 3. Verify and test
 
 ```bash
-# For npm packages
-npm view your-package version
-
-# For PyPI packages
-curl -s "https://pypi.org/pypi/your-package/json" | python3 -c "import sys,json; print(json.load(sys.stdin)['info']['version'])"
+claude
+> /mcp    # should show your server connected
 ```
 
-If either command fails, your package isn't published yet. Fix that first.
+### 4. Clean up
 
-### 2. Test the MCP server
+```bash
+claude mcp remove your-server-name
+```
 
-Add the `.mcp.json` config to a project, start Claude Code, and run `/mcp` to confirm the server connects. Try a few queries to make sure it works.
+### Pre-submission checklist
 
-### 3. Check your files
-
-- [ ] `plugins/your-plugin/.claude-plugin/plugin.json` exists and is valid JSON
-- [ ] `plugins/your-plugin/.mcp.json` exists and is valid JSON
-- [ ] `plugins/your-plugin/README.md` exists with features, installation, and package links
-- [ ] `.claude-plugin/marketplace.json` includes your plugin
-- [ ] Root `README.md` plugins table includes your plugin
-- [ ] Package is published and accessible on npm or PyPI
+- [ ] Package published on npm or PyPI
+- [ ] `claude mcp add` connects successfully
+- [ ] Queries return correct results
+- [ ] `plugin.json`, `.mcp.json`, `README.md` all present and valid
+- [ ] `marketplace.json` and root `README.md` updated
 
 ## Submitting a PR
 
-1. Fork the repo and create a branch (e.g., `plugin/your-plugin-name` or `docs/your-change`)
-2. Make your changes following the structure above
-3. Push to your fork and open a PR against `regen-network/regen-ai-claude`
-4. Fill out the PR template — it includes the checklist from above
+1. Fork the repo and create a branch
+2. Make changes following the structure above
+3. Push and open a PR against `gaiaaiagent/regen-ai-claude`
 
-### PR Guidelines
-
-- **One plugin per PR** — keep plugin additions focused
-- **Documentation changes** can be bundled together
-- **Title format:** `plugin: add your-plugin-name` for new plugins, `docs: description` for docs, `fix: description` for fixes
-- **Description:** explain what the MCP does, link to the source repo, and note any required configuration
-
-## Improving Existing Plugins
-
-To update an existing plugin:
-
-1. Make your changes in the plugin's directory
-2. If the MCP server has a new version, test it
-3. Update the README if features changed
-4. Bump the version in `plugin.json` if appropriate
-
-## Reporting Issues
-
-If an MCP server is broken, a plugin doesn't connect, or documentation is wrong:
-
-1. Open an issue describing what you expected vs. what happened
-2. Include which plugin, what query you tried, and any error output
-3. Note your environment: OS, Node.js version, Python version, Claude Code version
+**Title format:** `plugin: add name` for plugins, `docs: description` for docs, `fix: description` for fixes.
 
 ## License
 
-All contributions are licensed under Apache-2.0, matching the repo.
+Apache-2.0

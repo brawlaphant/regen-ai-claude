@@ -26,9 +26,44 @@ curl -fsSL https://claude.ai/install.sh | bash
 
 ## Quick Start
 
-### Option A: Manual `.mcp.json` (recommended — works today)
+### Option A: `claude mcp add` (recommended)
 
-Create or edit the `.mcp.json` file in your project root (or `~/.claude/.mcp.json` for global access):
+Run these commands in your terminal to add all four MCP servers. Use `--scope user` to make them available across all projects, or `--scope project` to scope them to the current directory.
+
+```bash
+# KOI — knowledge graph and ecological data (npm)
+claude mcp add --transport stdio --scope user \
+  --env KOI_API_ENDPOINT=https://regen.gaiaai.xyz/api/koi \
+  --env JENA_ENDPOINT=https://regen.gaiaai.xyz/api/koi/fuseki/koi/sparql \
+  regen-koi -- npx -y regen-koi-mcp@latest
+
+# Ledger — ecocredits, governance, blockchain data (PyPI)
+claude mcp add --transport stdio --scope user \
+  --env REGEN_MCP_LOG_LEVEL=INFO \
+  regen-network -- uvx regen-python-mcp
+
+# Registry Review — document analysis and compliance (PyPI)
+claude mcp add --transport stdio --scope user \
+  --env REGISTRY_REVIEW_LLM_EXTRACTION_ENABLED=true \
+  registry-review -- uvx registry-review-mcp
+
+# Regen Compute — ecological footprint and credit retirement (npm)
+claude mcp add --transport stdio --scope user \
+  regen-compute -- npx -y regen-compute@latest
+```
+
+Then start Claude Code and verify:
+
+```bash
+claude
+> /mcp
+```
+
+All four servers should appear as connected. That's it — no config files to edit, no repos to clone.
+
+### Option B: Edit `.mcp.json` manually
+
+If you prefer to manage config files directly, create `.mcp.json` in your project root (project-scoped) or `~/.claude/.mcp.json` (global):
 
 ```json
 {
@@ -75,33 +110,13 @@ Then enable MCP servers in `.claude/settings.json`:
 }
 ```
 
-Start Claude Code and verify:
-
-```bash
-claude
-> /mcp
-```
-
-All four MCP servers should appear as connected.
-
-### Option B: Claude CLI one-liners
-
-You can also add servers individually via the CLI:
-
-```bash
-claude mcp add regen-koi npx -y regen-koi-mcp@latest
-claude mcp add regen-network uvx regen-python-mcp
-claude mcp add registry-review uvx registry-review-mcp
-claude mcp add regen-compute npx -y regen-compute@latest
-```
-
 ### Option C: Plugin marketplace (coming soon)
 
 > **Note:** The `/plugin` commands below are not yet available in Claude Code.
 > They describe the planned marketplace workflow for when plugin support ships.
 
 ```
-/plugin marketplace add https://github.com/regen-network/regen-ai-claude
+/plugin marketplace add https://github.com/gaiaaiagent/regen-ai-claude
 /plugin install koi@regen-ai
 /plugin install ledger@regen-ai
 /plugin install registry-review@regen-ai
