@@ -1,230 +1,74 @@
-# Create the Claude Code Regen AI Plugin
-Your purpose is to structure a claude code plugin that enables instant access to the four Regen MCP servers.
+# Initialize Regen AI MCP Servers
 
+Step-by-step guide to connect the Regen Network MCP servers to Claude Code.
 
-Please review:
-https://code.claude.com/docs/en/plugins
+## Prerequisites
 
-And any other necessary claude code documentation.
+- [Node.js 18+](https://nodejs.org/) — required for **koi** (npm)
+- [Python with uv](https://github.com/astral-sh/uv) — required for **ledger** and **registry-review** (PyPI)
+- [Claude Code](https://code.claude.com/docs/en/setup)
 
-Review the structure found in:
-@/home/ygg/Workspace/sandbox/marketplaces/claude/
-
-Create a regen ai plugin based on the following: 
-
-Shawn's document from Notion:
-
-# Connecting The Regen MCPs
-
-1. Create a working directory:
+Install uv if needed:
 
 ```bash
-mkdir regen-mcps
-cd regen-mcps
-
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-1. Clone the MCP repos
+## Step 1: Add MCP Servers
+
+Choose **one** of the following methods.
+
+### Method A: `claude mcp add` (recommended)
+
+Run these commands in your terminal. Use `--scope user` for global access across all projects, or `--scope project` for current directory only.
 
 ```bash
-mkdir mcps
-git clone <https://github.com/regen-network/mcp.git> mcps/mcp
-git clone <https://github.com/gaiaaiagent/regen-koi-mcp.git> mcps/regen-koi-mcp
-git clone <https://github.com/gaiaaiagent/regen-python-mcp.git> mcps/regen-python-mcp
+# KOI — knowledge graph and ecological data (npm)
+claude mcp add --transport stdio --scope user \
+  --env KOI_API_ENDPOINT=https://regen.gaiaai.xyz/api/koi \
+  --env JENA_ENDPOINT=https://regen.gaiaai.xyz/api/koi/fuseki/koi/sparql \
+  regen-koi -- npx -y regen-koi-mcp@latest
 
+# Ledger — ecocredits, governance, blockchain data (PyPI)
+claude mcp add --transport stdio --scope user \
+  --env REGEN_MCP_LOG_LEVEL=INFO \
+  regen-network -- uvx regen-python-mcp
+
+# Registry Review — document analysis and compliance (PyPI)
+claude mcp add --transport stdio --scope user \
+  --env REGISTRY_REVIEW_LLM_EXTRACTION_ENABLED=true \
+  registry-review -- uvx registry-review-mcp
 ```
 
-1. Build the MCP servers
+No config files to edit. Servers download automatically on first use.
 
-```bash
-# Build regen mcp
-cd mcps/mcp
-npm install
-npm run build
+### Method B: Edit `.mcp.json` manually
 
-# Build regen-koi-mcp
-cd ../regen-koi-mcp
-npm install
-npm run build
+Create `.mcp.json` in your project root for project-scoped access, or at `~/.claude/.mcp.json` for global access:
 
-# Return to project root
-cd ../..
-
-```
-
-1. Enable MCPs in `.claude/settings.json`
-
-```bash
-mkdir -p .claude
-cat > .claude/settings.json << 'EOF'
-{
-  "enableAllProjectMcpServers": true
-}
-EOF
-
-```
-
-1. Add MCP configuration to `.mcp.json`
-
-From your `regen-mcps` directory, run:
-
-```bash
-cat > .mcp.json << EOF
+```json
 {
   "mcpServers": {
     "regen-koi": {
-      "command": "node",
-      "args": ["$(pwd)/mcps/regen-koi-mcp/dist/index.js"],
+      "command": "npx",
+      "args": ["-y", "regen-koi-mcp@latest"],
       "env": {
-        "KOI_API_ENDPOINT": "<https://regen.gaiaai.xyz/api/koi>",
-        "JENA_ENDPOINT": "<https://regen.gaiaai.xyz/api/koi/fuseki/koi/sparql>"
-      }
+        "KOI_API_ENDPOINT": "https://regen.gaiaai.xyz/api/koi",
+        "JENA_ENDPOINT": "https://regen.gaiaai.xyz/api/koi/fuseki/koi/sparql"
+      },
+      "description": "Regen KOI MCP Server - Knowledge graph queries and ecological data"
     },
     "regen-network": {
-      "command": "uv",
-      "args": [
-        "run",
-        "--directory",
-        "$(pwd)/mcps/regen-python-mcp",
-        "python",
-        "main.py"
-      ],
+      "command": "uvx",
+      "args": ["regen-python-mcp"],
       "env": {
-        "PYTHONPATH": "$(pwd)/mcps/regen-python-mcp/src",
         "REGEN_MCP_LOG_LEVEL": "INFO"
-      }
-    },
-    "regen": {
-      "command": "node",
-      "args": ["$(pwd)/mcps/mcp/server/dist/index.js"],
-      "env": {
-        "NODE_ENV": "production"
       },
-      "description": "Regen Network MCP Server - Access to Regen Ledger blockchain data"
-    }
-  }
-}
-EOF
-
-```
-
-Note: The `$(pwd)` will expand to your current working directory, creating absolute paths specific to your system.
-
-1. Start Claude Code
-
-```bash
-claude
-> /mcp
-
-```
-
-The MCP servers should now be available.
-
-# Connecting The Regen MCPs (Including Registry Review)
-
-1. Create a working directory:
-
-```bash
-mkdir regen-mcps
-cd regen-mcps
-
-```
-
-1. Clone the MCP repos
-
-```bash
-mkdir mcps
-git clone https://github.com/regen-network/mcp.git mcps/mcp
-git clone https://github.com/gaiaaiagent/regen-koi-mcp.git> mcps/regen-koi-mcp
-git clone https://github.com/gaiaaiagent/regen-python-mcp.git mcps/regen-python-mcp
-git clone https://github.com/gaiaaiagent/regen-registry-review-mcp.git mcps/regen-registry-review-mcp
-
-```
-
-1. Build the MCP servers
-
-```bash
-# Build regen mcp
-cd mcps/mcp
-npm install
-npm run build
-
-# Build regen-koi-mcp
-cd ../regen-koi-mcp
-npm install
-npm run build
-
-# Setup regen-registry-review-mcp
-cd ../regen-registry-review-mcp
-uv sync
-cp .env.example .env
-# Edit .env to add your REGISTRY_REVIEW_ANTHROPIC_API_KEY
-
-# Return to project root
-cd ../..
-
-```
-
-1. Enable MCPs in `.claude/settings.json`
-
-```bash
-mkdir -p .claude
-cat > .claude/settings.json << 'EOF'
-{
-  "enableAllProjectMcpServers": true
-}
-EOF
-
-```
-
-1. Add MCP configuration to `.mcp.json`
-
-From your `regen-mcps` directory, run:
-
-```bash
-cat > .mcp.json << EOF
-{
-  "mcpServers": {
-    "regen-koi": {
-      "command": "node",
-      "args": ["$(pwd)/mcps/regen-koi-mcp/dist/index.js"],
-      "env": {
-        "KOI_API_ENDPOINT": "<https://regen.gaiaai.xyz/api/koi>",
-        "JENA_ENDPOINT": "<https://regen.gaiaai.xyz/api/koi/fuseki/koi/sparql>"
-      }
-    },
-    "regen-network": {
-      "command": "uv",
-      "args": [
-        "run",
-        "--directory",
-        "$(pwd)/mcps/regen-python-mcp",
-        "python",
-        "main.py"
-      ],
-      "env": {
-        "PYTHONPATH": "$(pwd)/mcps/regen-python-mcp/src",
-        "REGEN_MCP_LOG_LEVEL": "INFO"
-      }
-    },
-    "regen": {
-      "command": "node",
-      "args": ["$(pwd)/mcps/mcp/server/dist/index.js"],
-      "env": {
-        "NODE_ENV": "production"
-      },
-      "description": "Regen Network MCP Server - Access to Regen Ledger blockchain data"
+      "description": "Regen Python MCP Server - Ecocredit queries and blockchain data"
     },
     "registry-review": {
-      "command": "uv",
-      "args": [
-        "run",
-        "--directory",
-        "$(pwd)/mcps/regen-registry-review-mcp",
-        "python",
-        "-m",
-        "registry_review_mcp.server"
-      ],
+      "command": "uvx",
+      "args": ["registry-review-mcp"],
       "env": {
         "REGISTRY_REVIEW_LLM_EXTRACTION_ENABLED": "true"
       },
@@ -232,196 +76,106 @@ cat > .mcp.json << EOF
     }
   }
 }
-EOF
-
 ```
 
-Note: The `$(pwd)` will expand to your current working directory, creating absolute paths specific to your system.
+If using project-scoped `.mcp.json`, also enable MCP servers in `.claude/settings.json`:
 
-1. Start Claude Code
+```json
+{
+  "enableAllProjectMcpServers": true
+}
+```
+
+### Method C: Clone and build from source (for development)
+
+Use this if you need to modify the MCP server source code:
+
+```bash
+mkdir -p ~/regen-mcps/mcps && cd ~/regen-mcps
+git clone https://github.com/gaiaaiagent/regen-koi-mcp.git mcps/regen-koi-mcp
+git clone https://github.com/gaiaaiagent/regen-python-mcp.git mcps/regen-python-mcp
+git clone https://github.com/gaiaaiagent/regen-registry-review-mcp.git mcps/regen-registry-review-mcp
+
+# Build Node.js servers
+cd mcps/regen-koi-mcp && npm install && npm run build && cd ../..
+
+# Setup Python servers
+cd mcps/regen-registry-review-mcp && uv sync && cp .env.example .env && cd ../..
+```
+
+Then register local builds with Claude Code:
+
+```bash
+claude mcp add --transport stdio --scope user \
+  --env KOI_API_ENDPOINT=https://regen.gaiaai.xyz/api/koi \
+  --env JENA_ENDPOINT=https://regen.gaiaai.xyz/api/koi/fuseki/koi/sparql \
+  regen-koi -- node ~/regen-mcps/mcps/regen-koi-mcp/dist/index.js
+
+claude mcp add --transport stdio --scope user \
+  --env REGEN_MCP_LOG_LEVEL=INFO \
+  regen-network -- uv run --directory ~/regen-mcps/mcps/regen-python-mcp python main.py
+
+claude mcp add --transport stdio --scope user \
+  --env REGISTRY_REVIEW_LLM_EXTRACTION_ENABLED=true \
+  registry-review -- uv run --directory ~/regen-mcps/mcps/regen-registry-review-mcp python -m registry_review_mcp.server
+```
+
+## Step 2: Verify
+
+Start Claude Code and check that all servers are connected:
 
 ```bash
 claude
 > /mcp
-
 ```
 
-The MCP servers should now be available.
+You should see each server listed with a connected status.
 
+## Step 3: Test Each Plugin
 
+Try these queries to confirm each MCP is working:
 
-I am using the GPT KOI right now and finding some issues.  I will try to make a full report.
-40 replies
-Gregory
-  Today at 8:54 AM
-issue 1: Aneka.io is no longer an active explorer, so we need to update docs to reflect that fact.  only mintscan.io works now, or direct ledger / registry api interfaces
-Gregory
-  Today at 9:03 AM
-It looks to me like the issue is the Regen KOI bot does not have the regen ledger MCP integration, so it is not really able to produce accurate real time queries of onchain data, so it is just making things up.
-Gregory
-  Today at 9:15 AM
-here is a link to the chat, in case that’s useful in improving MCP performance: https://chatgpt.com/share/e/69385920-f140-800d-931a-c9e707b083b3
-Darren Zal
-  Today at 9:35 AM
-the Regen KOI mcp is seperate from the ledge mcp (that JuanCarlo started), we would combine them easily if you want
-shawn
-  Today at 9:41 AM
-image.png
- 
-image.png
+### KOI (Knowledge Graph)
 
+> "Search the knowledge graph for soil carbon projects"
 
-shawn
-  Today at 9:50 AM
-@Gregory Can you tell me the prompt?
-Gregory
-  Today at 9:54 AM
-I understand that these are two seperate MCPs.  however our KOI certainly must be able to accurately query the params, credits and data onchain.
-9:54
-and or we need a sub agent it can query for those requests in a routing system
-9:58
-here is the full output: https://docs.google.com/document/d/1C3Usgs6gLIaVKL8ZZCpqp4sVQFl-2B6guqkVim56Pww/edit?tab=t.0
-Google Docs
+### Ledger (Blockchain Data)
 
+> "What credit classes exist on Regen Network?"
 
-Google Docs Logo
-KOI MCP test 1 GPT Output
-Document in Google Docs
-9:58 AM
+### Registry Review (Document Analysis)
 
+> "What does a Regen methodology verification look like?"
 
-shawn
-  Today at 9:59 AM
-@Gregory I asked claude code which is connect to both MCPs:
-Please discover the aggregate value of all credits that have ever been issued on the regen chain. (edited) 
-Gregory
-  Today at 10:00 AM
-Nice.  I need to get my claude code running etc.  I still keep getting sucked into work flows instead of getting tooling set up!
-shawn
-  Today at 10:00 AM
-image.png
- 
-image.png
-Gregory
-  Today at 10:00 AM
-mind putting that into a .md or google doc or something?
-shawn
-  Today at 10:00 AM
-Sure
-10:01
-But we can add both MCPs to the KOI GPT and also tell the KOI GPT to not make up data.
-Gregory
-  Today at 10:02 AM
-here was my original prompt:
-10:02
-what is the total number of credits, their credit class information, and the number of hectares of land managed that the total and each class represents, as well as their dollar value, live on regen ledger right now?
-10:03
-that list of credits does not look complete to me.  for instance it is missing kulshun carbon trusts biochar, terrasos, ecometric, and some others i think
-10:04
-i had a call get canceled.  I am going to review forum post and see if I can’t get claude code running and get myself connected to both MCPs.
-10:04
-wish me luck!
-shawn
-  Today at 10:06 AM
-Because of limitation on post lengths I split the post into two. The first post is about architecture and motivation for KOI. The second post being put out this week will be about installation and usage. And I'm gathering good direction from this discussion now.
-I can start working on that post now and hopefully have it up tomorrow. (possibly today)
-shawn
-  Today at 10:36 AM
-https://www.notion.so/regennetwork/Aggregate-Credit-Values-MCP-Test-2c425b77eda1806881e8ce7cb8da7569
-image.png
- 
-image.png
-Gregory
-  Today at 10:40 AM
-could you share details about how you set up claude code repos on your local machine?
-10:40
-just want to make sure I am doing that part in the best possible way
-10:41
-also @shawn you are now the highest level of user
-10:41
-so you should be able to go to town on the forum
-shawn
-  Today at 10:41 AM
-Oh awesome!
-10:41
-Thanks!
-10:41
-Yeah I'll make a quick notion doc now.
-Gregory
-  Today at 10:41 AM
-i can also make either you or darren or both admins if you want
-10:41
-if we want to play with forum as a key knowledge repo and automate anything there.
-shawn
-  Today at 10:42 AM
-Sure perhaps you can make both of us admins.
-Gregory
-  Today at 10:47 AM
-will do
-Darren Zal
-  Today at 10:51 AM
-"could you share details about how you set up claude code repos on your local machine?"  do you mean how you install the MCP servers to work with claude code?  or how to initialize a repo when working with claude code (create a claude.md etc)? or both?
-shawn
-  Today at 11:03 AM
-This works for me for a fresh installation of three mcps (KOI MCP, Regen MCP, and Python Regen MCP)
-https://www.notion.so/regennetwork/Claude-Code-MCP-Setup-2c425b77eda180729dc9cc377043c4ed
-11:03
-I didn't include the registry MCP but I could include that as well.
-Darren Zal
-  Today at 11:09 AM
-pros for cloning the repos:
-- You can modify the source code
- - Test changes before they're published
- - Run from a specific branch or commit
- - Useful for development/debugging
-for the koi mcp you can also install it for claude code with
-claude mcp add regen-koi npx regen-koi-mcp@latest
-Pros:
- - One command, instant setup
- - Auto-updates (always gets @latest from npm)
- - Works globally across all projects
-BUT, you cannot modify the code
-shawn
-  Today at 11:10 AM
-I historically find that claude mcp add command very brittle, often not working. I find the cloning method to be more reliable. But if it works that's great, the auto-updating is very valuable.
-11:10
-I appended a second version in the doc that includes the registry mcp.
-Darren Zal
-  Today at 11:15 AM
-I just tested it and it worked for me, but please let me know if it is not working, another thing is that the local clone approach with .mcp.json is project-scoped, not global right?  so the MCPs would only be available when you're in that directory (regen-mcps, or its subdirectories)?
-I think to get them to work from any directory you could do:
-# 1. Create a permanent home for the MCPs
-  mkdir -p ~/regen-mcps/mcps
-  cd ~/regen-mcps
+## Optional Configuration
 
-  # 2. Clone the MCP repos
-  git clone https://github.com/regen-network/mcp.git mcps/mcp
-  git clone https://github.com/gaiaaiagent/regen-koi-mcp.git mcps/regen-koi-mcp
-  git clone https://github.com/gaiaaiagent/regen-python-mcp.git
-  mcps/regen-python-mcp
-  git clone https://github.com/gaiaaiagent/regen-registry-review-mcp.git
-  mcps/regen-registry-review-mcp
+### Registry Review — LLM extraction
 
-  # 3. Build the MCP servers
-  cd mcps/mcp && npm install && npm run build && cd ../..
-  cd mcps/regen-koi-mcp && npm install && npm run build && cd ../..
-  cd mcps/regen-registry-review-mcp && uv sync && cp .env.example .env && cd ../..
+To enable AI-powered document extraction, add your Anthropic API key:
 
-  # 4. Add to global Claude Code settings
-  claude mcp add-json regen-koi
-  "{\"command\":\"node\",\"args\":[\"$HOME/regen-mcps/mcps/regen-koi-mcp/dist/index
-  .js\"],\"env\":{\"KOI_API_ENDPOINT\":\"https://regen.gaiaai.xyz/api/koi\"}}"
+```bash
+claude mcp add --transport stdio --scope user \
+  --env REGISTRY_REVIEW_LLM_EXTRACTION_ENABLED=true \
+  --env REGISTRY_REVIEW_ANTHROPIC_API_KEY=sk-ant-... \
+  registry-review -- uvx registry-review-mcp
+```
 
-  claude mcp add-json regen "{\"command\":\"node\",\"args\":[\"$HOME/regen-mcps/mcp
-  s/mcp/server/dist/index.js\"],\"env\":{\"NODE_ENV\":\"production\"}}"
+## Managing Servers
 
-  claude mcp add-json regen-network "{\"command\":\"uv\",\"args\":[\"run\",\"--dire
-  ctory\",\"$HOME/regen-mcps/mcps/regen-python-mcp\",\"python\",\"main.py\"],\"env\
-  ":{\"PYTHONPATH\":\"$HOME/regen-mcps/mcps/regen-python-mcp/src\"}}"
+```bash
+# List all configured MCP servers
+claude mcp list
 
-  claude mcp add-json registry-review
-  "{\"command\":\"uv\",\"args\":[\"run\",\"--directory\",\"$HOME/regen-mcps/mcps/re
-  gen-registry-review-mcp\",\"python\",\"-m\",\"registry_review_mcp.server\"],\"env
-  \":{\"REGISTRY_REVIEW_LLM_EXTRACTION_ENABLED\":\"true\"}}"
+# Get details for a specific server
+claude mcp get regen-koi
 
-Now the MCPs are available in any directory when you run claude.
+# Remove a server
+claude mcp remove regen-koi
+```
+
+## Troubleshooting
+
+- **Server not appearing in `/mcp`**: Restart Claude Code after adding servers.
+- **npx/uvx not found**: Ensure Node.js 18+ and uv are installed and on your PATH.
+- **KOI returns inaccurate on-chain data**: KOI queries the knowledge graph, not the ledger directly. Use the ledger MCP for real-time on-chain data.
+- **Block explorer**: Use [mintscan.io/regen](https://www.mintscan.io/regen) for on-chain verification.

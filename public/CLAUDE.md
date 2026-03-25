@@ -121,6 +121,30 @@ Project area: 1,234 hectares
 Source: verified via derive_offchain_hectares
 ```
 
+## Setup
+
+Add the Regen MCP servers to Claude Code with `claude mcp add`:
+
+```bash
+# KOI — knowledge graph and ecological data (npm)
+claude mcp add --transport stdio --scope user \
+  --env KOI_API_ENDPOINT=https://regen.gaiaai.xyz/api/koi \
+  --env JENA_ENDPOINT=https://regen.gaiaai.xyz/api/koi/fuseki/koi/sparql \
+  regen-koi -- npx -y regen-koi-mcp@latest
+
+# Ledger — ecocredits, governance, blockchain data (PyPI)
+claude mcp add --transport stdio --scope user \
+  --env REGEN_MCP_LOG_LEVEL=INFO \
+  regen-network -- uvx regen-python-mcp
+
+# Registry Review — document analysis and compliance (PyPI)
+claude mcp add --transport stdio --scope user \
+  --env REGISTRY_REVIEW_LLM_EXTRACTION_ENABLED=true \
+  registry-review -- uvx registry-review-mcp
+```
+
+Restart Claude Code and run `/mcp` to verify all servers are connected.
+
 ## Resources
 
 - [Regen Network](https://regen.network) - Main website
