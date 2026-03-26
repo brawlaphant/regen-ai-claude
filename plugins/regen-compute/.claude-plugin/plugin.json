@@ -1,0 +1,12 @@
+{
+  "name": "regen-compute",
+  "version": "1.0.0",
+  "description": "Regenerative Compute MCP - AI compute footprint estimation and verified ecocredit retirement on Regen Network",
+  "author": {
+    "name": "Regen Network Development",
+    "url": "https://github.com/regen-network"
+  },
+  "homepage": "https://github.com/regen-network/regen-compute",
+  "license": "Apache-2.0",
+  "keywords": ["regen", "compute", "ecocredits", "carbon-credits", "footprint", "retirement", "mcp"]
+}

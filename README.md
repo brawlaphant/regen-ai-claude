@@ -1,6 +1,6 @@
 # Regen AI - Claude Code Plugin Marketplace
 
-Zero-config access to the Regen Network ecosystem through three MCP server plugins.
+Zero-config access to the Regen Network ecosystem through four MCP server plugins.
 
 ## Plugins
 
@@ -9,6 +9,7 @@ Zero-config access to the Regen Network ecosystem through three MCP server plugi
 | **koi** | [regen-koi-mcp](https://www.npmjs.com/package/regen-koi-mcp) | Knowledge Organizational Infrastructure - Regen Commons - Knowledge Graphs - Embeddings |
 | **ledger** | [regen-python-mcp](https://pypi.org/project/regen-python-mcp/) | Regen Ledger, Ecocredits, Sales, Governance, Portfolios, Regen Accounts |
 | **registry-review** | [registry-review-mcp](https://pypi.org/project/registry-review-mcp/) | Regen Project Registration Assistance - Methodology Verification - Automation |
+| **regen-compute** | [regen-compute](https://www.npmjs.com/package/regen-compute) | AI compute footprint estimation and verified ecocredit retirement on Regen Network |
 
 ## Prerequisites
 
@@ -44,6 +45,7 @@ claude
 /plugin install koi@regen-ai
 /plugin install ledger@regen-ai
 /plugin install registry-review@regen-ai
+/plugin install regen-compute@regen-ai
 ```
 
 ### 4. Restart and Verify
@@ -66,6 +68,8 @@ Once installed, use natural language:
 > "Analyze my portfolio's ecological impact"
 
 > "Review this project design document for compliance"
+
+> "Estimate my AI session's ecological footprint and retire credits"
 
 ## Resources
 

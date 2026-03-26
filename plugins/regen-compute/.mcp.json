@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "regen-compute": {
+      "command": "npx",
+      "args": ["-y", "regen-compute@latest"],
+      "description": "Regenerative Compute MCP Server - AI footprint estimation, credit browsing, and on-chain retirement"
+    }
+  }
+}
